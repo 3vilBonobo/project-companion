@@ -53,6 +53,9 @@ importers:
       '@ionic/angular':
         specifier: ^8.7.0
         version: 8.8.19(869ff67a2aa5607c813cde070e4a7a01)
+      '@ionic/core':
+        specifier: ^8.7.0
+        version: 8.8.19
       ionicons:
         specifier: ^7.4.0
         version: 7.4.0
