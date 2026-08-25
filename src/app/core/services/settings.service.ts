@@ -7,6 +7,7 @@ export const DEFAULT_SETTINGS: Settings = {
   firstName: '',
   preferredTaskMinutes: 20,
   reducedMotion: false,
+  soundEffectsEnabled: true,
   theme: 'calm',
   remindersEnabled: false,
   reminderTime: '09:00'
@@ -57,6 +58,7 @@ export class SettingsService {
       firstName: typeof value.firstName === 'string' ? value.firstName.trim().slice(0, 50) : DEFAULT_SETTINGS.firstName,
       preferredTaskMinutes: Number.isFinite(minutes) ? Math.min(180, Math.max(5, minutes)) : DEFAULT_SETTINGS.preferredTaskMinutes,
       reducedMotion: value.reducedMotion === true,
+      soundEffectsEnabled: value.soundEffectsEnabled !== false,
       theme: this.isTheme(value.theme) ? value.theme : DEFAULT_SETTINGS.theme,
       remindersEnabled: value.remindersEnabled === true,
       reminderTime: typeof value.reminderTime === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value.reminderTime) ? value.reminderTime : DEFAULT_SETTINGS.reminderTime

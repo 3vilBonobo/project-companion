@@ -207,11 +207,11 @@ export class PlanImportComponent {
     }
   }
 
-  async copyPrompt(): Promise<void> {
-    const prompt = projectPlanPrompt(this.settings.settings().firstName);
+  async copyPrompt(projectDescription = ''): Promise<void> {
+    const prompt = projectPlanPrompt(this.settings.settings().firstName, projectDescription);
     try {
       await navigator.clipboard.writeText(prompt);
-      await this.showToast('ChatGPT prompt copied. Add your project description, then save its JSON response.');
+      await this.showToast(projectDescription ? 'Your planning prompt is ready. Paste it into any LLM.' : 'Planning prompt copied. Add your project description, then return with its JSON response.');
     } catch {
       const alert = await this.alerts.create({
         header: 'ChatGPT project-plan prompt',

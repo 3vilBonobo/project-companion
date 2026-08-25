@@ -21,26 +21,16 @@ import { ProgressService } from "../../../core/services/progress.service";
       <h2>{{ project().title }}</h2>
       <p>{{ project().description || "A meaningful project, one small step at a time." }}</p>
     </div>
-    @if (categoryProgress().length) {
-    <div class="category-summary" aria-label="Progress by category">
-      @for (category of categoryProgress(); track category.category) {
-      <div
-        class="category-ring"
-        role="progressbar"
-        [attr.aria-label]="category.category + ': ' + category.completed + ' of ' + category.total + ' complete'"
-        [attr.aria-valuenow]="category.percentage"
-        aria-valuemin="0"
-        aria-valuemax="100">
-        <div class="ring-visual">
-          <svg viewBox="0 0 44 44" aria-hidden="true">
-            <circle class="ring-track" cx="22" cy="22" r="18" />
-            <circle class="ring-value" cx="22" cy="22" r="18" stroke-dasharray="113.1" [attr.stroke-dashoffset]="ringOffset(category.percentage)" />
-          </svg>
-          <small>{{ category.completed }}/{{ category.total }}</small>
-        </div>
-        <span>{{ category.category }}</span>
+    @if (journey().length) {
+    <div class="quest-journey" aria-label="Project quest journey">
+      <div class="journey-line" aria-hidden="true"><i [style.width.%]="progress.forProject(project()).percentage"></i></div>
+      @for (step of journey(); track step.id; let index = $index) {
+      <div class="quest-node" [class.complete]="step.completed" [class.current]="step.current" [attr.aria-label]="step.title + (step.completed ? ', complete' : step.current ? ', current quest' : ', upcoming')">
+        <span>{{ step.completed ? '✓' : index + 1 }}</span>
+        @if (step.current) { <small>Next</small> }
       </div>
       }
+      @if (hiddenSteps() > 0) { <div class="more-steps" [attr.aria-label]="hiddenSteps() + ' more steps'">+{{ hiddenSteps() }}</div> }
     </div>
     }
     <div class="card-actions">
@@ -107,71 +97,32 @@ import { ProgressService } from "../../../core/services/progress.service";
         color: var(--muted);
         line-height: 1.45;
       }
-      .category-summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
-        align-items: start;
-        gap: 14px 10px;
+      .quest-journey {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
         margin-top: 20px;
-        padding-top: 16px;
+        padding: 20px 2px 4px;
         border-top: 1px solid var(--line);
       }
-      .category-ring {
-        --ring-color: var(--ion-color-primary);
+      .journey-line { position: absolute; z-index: 0; top: 36px; left: 20px; right: 20px; height: 5px; overflow: hidden; border-radius: 99px; background: var(--ion-color-light-shade); }
+      .journey-line i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--ion-color-primary), var(--accent-2)); transition: width .35s ease; }
+      .quest-node {
+        position: relative;
+        z-index: 1;
         display: grid;
         justify-items: center;
-        gap: 7px;
-        min-width: 0;
-        color: var(--ink-soft);
-        text-align: center;
+        gap: 5px;
+        color: var(--muted);
       }
-      .category-ring:nth-child(6n + 1) { --ring-color: var(--ion-color-primary); }
-      .category-ring:nth-child(6n + 2) { --ring-color: var(--accent-2); }
-      .category-ring:nth-child(6n + 3) { --ring-color: var(--accent-3); }
-      .category-ring:nth-child(6n + 4) { --ring-color: color-mix(in srgb, var(--ion-color-primary) 58%, var(--accent-2)); }
-      .category-ring:nth-child(6n + 5) { --ring-color: color-mix(in srgb, var(--accent-3) 58%, var(--ion-color-primary)); }
-      .category-ring:nth-child(6n + 6) { --ring-color: color-mix(in srgb, var(--accent-2) 55%, var(--accent-3)); }
-      .ring-visual {
-        position: relative;
-        display: grid;
-        place-items: center;
-        width: 56px;
-        height: 56px;
-      }
-      .ring-visual svg {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        transform: rotate(-90deg);
-      }
-      .ring-track,
-      .ring-value {
-        fill: none;
-        stroke-width: 5;
-      }
-      .ring-track { stroke: color-mix(in srgb, var(--ring-color) 22%, var(--surface)); }
-      .ring-value {
-        stroke: var(--ring-color);
-        stroke-linecap: round;
-        transition: stroke-dashoffset .35s ease;
-      }
-      .ring-visual small {
-        position: relative;
-        color: var(--ring-color);
-        font-size: .65rem;
-        font-weight: 850;
-      }
-      .category-ring > span {
-        max-width: 82px;
-        overflow: hidden;
-        color: var(--ink-soft);
-        font-size: .68rem;
-        font-weight: 750;
-        line-height: 1.2;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+      .quest-node > span { display: grid; place-items: center; width: 34px; height: 34px; border: 3px solid var(--surface); border-radius: 50%; background: var(--ion-color-light-shade); box-shadow: 0 0 0 1px var(--line); color: var(--muted); font-size: .72rem; font-weight: 850; }
+      .quest-node.complete > span { background: var(--ion-color-primary); box-shadow: 0 0 0 1px var(--ion-color-primary); color: var(--ion-color-primary-contrast); }
+      .quest-node.current > span { background: var(--accent-3); box-shadow: 0 0 0 2px var(--accent-3), 0 4px 0 color-mix(in srgb, var(--accent-3) 45%, var(--ink)); color: var(--ink); animation: current-quest 2s ease-in-out infinite; }
+      .quest-node small { color: var(--ion-color-primary); font-size: .58rem; font-weight: 850; text-transform: uppercase; }
+      .more-steps { position: relative; z-index: 1; display: grid; place-items: center; width: 34px; height: 34px; border: 3px solid var(--surface); border-radius: 50%; background: var(--ion-color-light); box-shadow: 0 0 0 1px var(--line); color: var(--ink-soft); font-size: .65rem; font-weight: 850; }
+      @keyframes current-quest { 50% { transform: translateY(-3px); } }
       .card-actions {
         display: flex;
         align-items: center;
@@ -219,8 +170,12 @@ export class ProjectCardComponent {
   readonly project = input.required<Project>();
   readonly opened = output<void>();
   readonly deleted = output<void>();
-  readonly categoryProgress = computed(() => this.progress.forCategories(this.project()));
-  ringOffset(percentage: number): number { return 113.1 * (1 - Math.min(100, Math.max(0, percentage)) / 100); }
+  readonly journey = computed(() => {
+    const tasks = [...this.project().tasks].sort((first, second) => first.order - second.order);
+    const currentId = tasks.find(task => !task.completed)?.id;
+    return tasks.slice(0, 6).map(task => ({ id: task.id, title: task.title, completed: task.completed, current: task.id === currentId }));
+  });
+  readonly hiddenSteps = computed(() => Math.max(0, this.project().tasks.length - this.journey().length));
   constructor(readonly progress: ProgressService) {
     addIcons({ arrowForward, trashOutline });
   }

@@ -12,13 +12,14 @@ import {
   ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { alarmOutline, cloudDownloadOutline, cloudOfflineOutline, colorPaletteOutline, documentOutline, gameControllerOutline, leafOutline, notificationsOutline, personCircleOutline, phonePortraitOutline, sparklesOutline, terminalOutline, trashOutline } from 'ionicons/icons';
+import { alarmOutline, cloudDownloadOutline, cloudOfflineOutline, colorPaletteOutline, documentOutline, gameControllerOutline, leafOutline, notificationsOutline, personCircleOutline, phonePortraitOutline, sparklesOutline, terminalOutline, trashOutline, volumeHighOutline } from 'ionicons/icons';
 import { AppTheme } from '../../core/models/project.models';
 import { BackupService } from '../../core/services/backup.service';
 import { ProjectService } from '../../core/services/project.service';
 import { ReminderService } from '../../core/services/reminder.service';
 import { SettingsService } from '../../core/services/settings.service';
 import { AppTabsComponent } from '../../shared/components/app-tabs/app-tabs.component';
+import { InteractionFeedbackService } from '../../core/services/interaction-feedback.service';
 
 @Component({
   selector: 'app-settings',
@@ -37,10 +38,16 @@ export class SettingsPage {
   private readonly alerts = inject(AlertController);
   private readonly toasts = inject(ToastController);
   readonly reminders = inject(ReminderService);
+  private readonly feedback = inject(InteractionFeedbackService);
 
-  constructor() { addIcons({ alarmOutline, cloudDownloadOutline, cloudOfflineOutline, colorPaletteOutline, documentOutline, gameControllerOutline, leafOutline, notificationsOutline, personCircleOutline, phonePortraitOutline, sparklesOutline, terminalOutline, trashOutline }); }
+  constructor() { addIcons({ alarmOutline, cloudDownloadOutline, cloudOfflineOutline, colorPaletteOutline, documentOutline, gameControllerOutline, leafOutline, notificationsOutline, personCircleOutline, phonePortraitOutline, sparklesOutline, terminalOutline, trashOutline, volumeHighOutline }); }
 
   selectTheme(theme: AppTheme): void { this.settings.update({ theme }); }
+
+  toggleSounds(enabled: boolean): void {
+    this.settings.update({ soundEffectsEnabled: enabled });
+    if (enabled) this.feedback.preview();
+  }
 
   async toggleReminders(enabled: boolean): Promise<void> {
     const granted = await this.reminders.setEnabled(enabled);

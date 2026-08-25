@@ -15,7 +15,7 @@ class MemoryStorage {
 
 describe('TodaysTaskService', () => {
   it('favors the earliest task that fits the preferred duration', () => {
-    const preferences = signal<Settings>({ firstName: '', preferredTaskMinutes: 15, reducedMotion: false, theme: 'calm', remindersEnabled: false, reminderTime: '09:00' });
+    const preferences = signal<Settings>({ firstName: '', preferredTaskMinutes: 15, reducedMotion: false, soundEffectsEnabled: true, theme: 'calm', remindersEnabled: false, reminderTime: '09:00' });
     TestBed.configureTestingModule({ providers: [
       ProjectService,
       TodaysTaskService,

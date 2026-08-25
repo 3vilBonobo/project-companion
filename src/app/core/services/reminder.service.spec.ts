@@ -33,6 +33,7 @@ describe('ReminderService', () => {
       firstName: '',
       preferredTaskMinutes: 20,
       reducedMotion: false,
+      soundEffectsEnabled: true,
       theme: 'calm',
       remindersEnabled: false,
       reminderTime: '09:00'

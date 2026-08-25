@@ -44,6 +44,8 @@ import { EmptyStateComponent } from "../../shared/components/empty-state/empty-s
 import { AppTabsComponent } from "../../shared/components/app-tabs/app-tabs.component";
 import { ProgressCircleComponent } from "../../shared/components/progress-circle/progress-circle.component";
 import { PlanImportComponent } from "../../shared/components/plan-import/plan-import.component";
+import { CompanionProgressService } from "../../core/services/companion-progress.service";
+import { InteractionFeedbackService } from "../../core/services/interaction-feedback.service";
 
 interface TaskCategoryGroup {
   category: string;
@@ -88,6 +90,8 @@ interface TaskCategoryGroup {
 export class ProjectDetailPage {
   readonly id = input("");
   readonly projects = inject(ProjectService);
+  readonly companion = inject(CompanionProgressService);
+  private readonly feedback = inject(InteractionFeedbackService);
   private readonly progressService = inject(ProgressService);
   private readonly alerts = inject(AlertController);
   private readonly actions = inject(ActionSheetController);
@@ -254,6 +258,25 @@ export class ProjectDetailPage {
     event.detail.complete(false);
   }
 
+  isCurrentTask(task: Task): boolean {
+    return !task.completed && this.project()?.tasks
+      .filter(candidate => !candidate.completed)
+      .sort((first, second) => first.order - second.order)[0]?.id === task.id;
+  }
+
+  toggleTask(task: Task): void {
+    const previousAchievements = this.companion.unlockedIds();
+    this.projects.toggleTask(this.id(), task.id);
+    if (!task.completed) {
+      const achievement = this.companion.newlyUnlocked(previousAchievements);
+      const message = achievement
+        ? `${achievement.icon} Achievement unlocked: ${achievement.title}`
+        : `Quest complete · +${this.companion.xpFor(task)} XP`;
+      void this.showToast(message);
+      this.feedback.questCompleted(Boolean(achievement));
+    }
+  }
+
   async openTaskActions(task: Task): Promise<void> {
     const sheet = await this.actions.create({
       header: task.title,
@@ -261,7 +284,7 @@ export class ProjectDetailPage {
         {
           text: task.completed ? "Mark as not complete" : "Mark as complete",
           icon: task.completed ? "ellipse-outline" : "checkmark-circle",
-          handler: () => this.projects.toggleTask(this.id(), task.id),
+          handler: () => this.toggleTask(task),
         },
         { text: "Edit step", icon: "create-outline", handler: () => this.editTask(task) },
         {

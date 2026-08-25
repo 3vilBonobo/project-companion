@@ -32,10 +32,14 @@ Rules:
 My project description:
 [PASTE MY PROJECT DESCRIPTION HERE]`;
 
-export function projectPlanPrompt(firstName: string): string {
+export function projectPlanPrompt(firstName: string, projectDescription = ''): string {
   const name = firstName.trim().slice(0, 50);
-  if (!name) return PROJECT_PLAN_PROMPT;
-  return `${PROJECT_PLAN_PROMPT}\n\nMy first name is ${name}. Address me by name occasionally in supportive descriptions or notes, but keep it natural and do not use my name in every task.`;
+  const description = projectDescription.trim().slice(0, 2000);
+  let prompt = description
+    ? PROJECT_PLAN_PROMPT.replace('[PASTE MY PROJECT DESCRIPTION HERE]', description)
+    : PROJECT_PLAN_PROMPT;
+  if (name) prompt += `\n\nMy first name is ${name}. Address me by name occasionally in supportive descriptions or notes, but keep it natural and do not use my name in every task.`;
+  return prompt;
 }
 
 @Injectable({ providedIn: 'root' })

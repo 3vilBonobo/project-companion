@@ -76,17 +76,18 @@
           role="list"
           [attr.aria-label]="hasTaskCategories() ? group.category + ' steps' : 'Project steps'">
           @for (task of group.tasks; track task.id) {
-          <li role="listitem" [class.completed]="task.completed">
+          <li role="listitem" [class.completed]="task.completed" [class.current]="isCurrentTask(task)">
+            <span class="trail" aria-hidden="true"></span>
             <button
               class="complete-button"
               type="button"
               [attr.aria-label]="task.completed ? 'Mark ' + task.title + ' as not complete' : 'Complete ' + task.title"
-              (click)="projects.toggleTask(project.id, task.id)">
+              (click)="toggleTask(task)">
               <ion-icon [name]="task.completed ? 'checkmark-circle' : 'ellipse-outline'" />
             </button>
             <button class="task-copy" type="button" (click)="editTask(task)">
               <strong>{{ task.title }}</strong>
-              <span>{{ task.estimatedMinutes }} min · {{ task.difficulty }}</span>
+              <span>{{ task.estimatedMinutes }} min · {{ task.difficulty }} · +{{ companion.xpFor(task) }} XP</span>
               @if (task.description) { <small>{{ task.description }}</small> }
             </button>
             <ion-button
@@ -97,6 +98,7 @@
               <ion-icon slot="icon-only" name="ellipsis-horizontal" />
             </ion-button>
             <ion-reorder [attr.aria-label]="'Drag to reorder ' + task.title" />
+            @if (isCurrentTask(task)) { <span class="next-quest">Next quest</span> }
           </li>
           }
         </ion-reorder-group>

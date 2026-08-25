@@ -57,6 +57,7 @@ export class BackupService {
     return (settings.firstName === undefined || typeof settings.firstName === 'string')
       && typeof settings.preferredTaskMinutes === 'number'
       && typeof settings.reducedMotion === 'boolean'
+      && (settings.soundEffectsEnabled === undefined || typeof settings.soundEffectsEnabled === 'boolean')
       && (settings.theme === undefined || settings.theme === 'calm' || settings.theme === 'playful' || settings.theme === 'code' || settings.theme === 'arcade' || settings.theme === 'wizard' || settings.theme === 'woodland')
       && (settings.remindersEnabled === undefined || typeof settings.remindersEnabled === 'boolean')
       && (settings.reminderTime === undefined || (typeof settings.reminderTime === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(settings.reminderTime)));

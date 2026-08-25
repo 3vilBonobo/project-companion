@@ -10,11 +10,13 @@ import {
   IonHeader,
   IonIcon,
   IonModal,
+  IonTextarea,
   IonTitle,
   IonToolbar,
 } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
-import { add, albumsOutline, brushOutline, chevronDown, clipboardOutline, cloudUploadOutline, codeSlashOutline, copyOutline, heartOutline, homeOutline, mapOutline, schoolOutline } from "ionicons/icons";
+import { add, albumsOutline, brushOutline, chevronDown, clipboardOutline, cloudUploadOutline, codeSlashOutline, copyOutline, heartOutline, homeOutline, mapOutline, schoolOutline, sparklesOutline, trophyOutline } from "ionicons/icons";
+import { CompanionProgressService } from "../../core/services/companion-progress.service";
 import { ProjectService } from "../../core/services/project.service";
 import { ProjectStarterTemplate, ProjectTemplateService } from "../../core/services/project-template.service";
 import { AppTabsComponent } from "../../shared/components/app-tabs/app-tabs.component";
@@ -33,6 +35,7 @@ import { ProjectCardComponent } from "../../shared/components/project-card/proje
     IonIcon,
     IonHeader,
     IonModal,
+    IonTextarea,
     IonTitle,
     IonToolbar,
     AppTabsComponent,
@@ -47,15 +50,17 @@ import { ProjectCardComponent } from "../../shared/components/project-card/proje
 })
 export class ProjectsPage {
   readonly projects = inject(ProjectService);
+  readonly companion = inject(CompanionProgressService);
   private readonly router = inject(Router);
   private readonly alerts = inject(AlertController);
   private readonly actions = inject(ActionSheetController);
   private readonly planImport = viewChild.required(PlanImportComponent);
   readonly templateCatalog = inject(ProjectTemplateService);
   readonly templatePickerOpen = signal(false);
+  readonly aiIdea = signal("");
 
   constructor() {
-    addIcons({ add, albumsOutline, brushOutline, chevronDown, clipboardOutline, cloudUploadOutline, codeSlashOutline, copyOutline, heartOutline, homeOutline, mapOutline, schoolOutline });
+    addIcons({ add, albumsOutline, brushOutline, chevronDown, clipboardOutline, cloudUploadOutline, codeSlashOutline, copyOutline, heartOutline, homeOutline, mapOutline, schoolOutline, sparklesOutline, trophyOutline });
   }
 
   open(id: string): void {
@@ -64,6 +69,12 @@ export class ProjectsPage {
   openImported(result: PlanImportResult): void {
     this.open(result.projectId);
   }
+
+  async copyAiPrompt(): Promise<void> {
+    await this.planImport().copyPrompt(this.aiIdea());
+  }
+
+  pasteAiPlan(): void { void this.planImport().openPasteDialog(); }
 
   async chooseProjectStart(): Promise<void> {
     const sheet = await this.actions.create({

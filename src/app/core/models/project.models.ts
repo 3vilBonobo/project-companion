@@ -29,6 +29,7 @@ export interface Settings {
   firstName: string;
   preferredTaskMinutes: number;
   reducedMotion: boolean;
+  soundEffectsEnabled: boolean;
   theme: AppTheme;
   remindersEnabled: boolean;
   reminderTime: string;

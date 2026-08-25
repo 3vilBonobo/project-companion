@@ -13,7 +13,40 @@
       }
     </header>
 
+    <section class="ai-planner" aria-labelledby="ai-planner-heading">
+      <div class="ai-planner-copy">
+        <span class="ai-badge"><ion-icon name="sparkles-outline" /> Plan with any LLM</span>
+        <h2 id="ai-planner-heading">Turn an idea into a gentle quest</h2>
+        <p>Describe what you want to accomplish. We’ll prepare a safe JSON-planning prompt for ChatGPT, Claude, Gemini, or another LLM. You review everything before it becomes a project.</p>
+        <div class="privacy-note"><strong>Your choice, your data</strong><span>Project Companion never sends your projects to an AI service.</span></div>
+      </div>
+      <div class="ai-planner-form">
+        <label for="project-idea"><strong>What would you like to do?</strong><small>A sentence or a rough brain-dump is enough.</small></label>
+        <ion-textarea id="project-idea" aria-label="Project idea" fill="outline" autoGrow="true" maxlength="2000" rows="3" placeholder="For example: I want to organize my home office without getting overwhelmed…" [value]="aiIdea()" (ionInput)="aiIdea.set($event.detail.value || '')" />
+        <div class="ai-actions">
+          <ion-button [disabled]="!aiIdea().trim()" (click)="copyAiPrompt()"><ion-icon name="copy-outline" slot="start" />Copy ready prompt</ion-button>
+          <button type="button" (click)="pasteAiPlan()"><ion-icon name="clipboard-outline" />Paste JSON response</button>
+        </div>
+        <ol aria-label="How AI planning works"><li><b>1</b><span>Copy prompt</span></li><li><b>2</b><span>Ask your LLM</span></li><li><b>3</b><span>Paste and review</span></li></ol>
+      </div>
+    </section>
+
     @if (projects.hasProjects()) {
+    <section class="companion-progress" aria-label="Your companion progress">
+      <div class="level-summary">
+        <span class="level-emblem"><ion-icon name="trophy-outline" /></span>
+        <div><small>Companion level</small><strong>{{ companion.level() }}</strong></div>
+        <div class="xp-summary"><span>{{ companion.xp() }} XP</span><div><i [style.width.%]="companion.levelProgress()"></i></div></div>
+      </div>
+      <div class="momentum-summary"><ion-icon name="sparkles-outline" /><span><strong>{{ companion.momentum() }} active {{ companion.momentum() === 1 ? 'day' : 'days' }}</strong><small>in the last seven · rest never resets you</small></span></div>
+      <div class="achievement-strip" aria-label="Achievements">
+        @for (achievement of companion.achievements(); track achievement.id) {
+        <div class="achievement" [class.unlocked]="achievement.unlocked" [attr.aria-label]="achievement.title + (achievement.unlocked ? ', unlocked' : ', locked')">
+          <span>{{ achievement.unlocked ? achievement.icon : '·' }}</span><small>{{ achievement.title }}</small>
+        </div>
+        }
+      </div>
+    </section>
     <section class="project-list" aria-label="Projects">
       @for (project of projects.projects(); track project.id) {
       <app-project-card

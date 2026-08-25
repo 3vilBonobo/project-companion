@@ -8,6 +8,12 @@ describe('ProjectPlanImportService', () => {
     expect(projectPlanPrompt('  Mina  ')).toContain('My first name is Mina.');
   });
 
+  it('places a supplied project idea directly into the ready-to-use prompt', () => {
+    const prompt = projectPlanPrompt('', 'Create a balcony herb garden');
+    expect(prompt).toContain('My project description:\nCreate a balcony herb garden');
+    expect(prompt).not.toContain('[PASTE MY PROJECT DESCRIPTION HERE]');
+  });
+
   it('normalizes a valid generated plan and supplies optional defaults', () => {
     const plan = service.fromText(JSON.stringify({
       schemaVersion: 1,
