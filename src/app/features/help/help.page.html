@@ -1,0 +1,33 @@
+<ion-content [fullscreen]="true">
+  <main class="page-shell help-shell">
+    <span class="eyebrow">We’re here to help</span>
+    <h1>Help &amp; FAQ</h1>
+    <p class="intro">Quick answers for planning projects, choosing your next step, and keeping your work safe.</p>
+
+    <section class="welcome-card" aria-labelledby="welcome-heading">
+      <span class="welcome-icon"><ion-icon name="leaf-outline" /></span>
+      <div><h2 id="welcome-heading">Start small. You’re doing fine.</h2><p>Create a project, break it into doable tasks, then let Today offer one gentle next step.</p></div>
+    </section>
+
+    <div class="search-wrap">
+      <ion-searchbar aria-label="Search frequently asked questions" placeholder="Search help" [debounce]="100" [value]="query()" (ionInput)="updateQuery($event.detail.value)" />
+    </div>
+
+    <section class="faq-section" aria-labelledby="faq-heading">
+      <div class="section-title"><ion-icon name="help-circle-outline" /><div><h2 id="faq-heading">Frequently asked questions</h2><p>{{ filteredQuestions().length }} {{ filteredQuestions().length === 1 ? 'answer' : 'answers' }}</p></div></div>
+      <div class="faq-list">
+        @for (item of filteredQuestions(); track item.question) {
+          <details>
+            <summary><span>{{ item.question }}</span><ion-icon name="chevron-down-outline" /></summary>
+            <p>{{ item.answer }}</p>
+          </details>
+        } @empty {
+          <div class="empty-results"><ion-icon name="search-outline" /><strong>No matching answers</strong><p>Try a shorter search, such as “backup,” “task,” or “reminder.”</p></div>
+        }
+      </div>
+    </section>
+
+    <aside class="tip-card"><ion-icon name="bulb-outline" /><div><strong>Good to know</strong><p>Your projects stay on this device. Export a backup from Settings from time to time.</p></div></aside>
+  </main>
+</ion-content>
+<ion-footer><app-tabs active="help" /></ion-footer>

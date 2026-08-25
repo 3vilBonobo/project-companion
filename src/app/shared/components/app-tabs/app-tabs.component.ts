@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { IonIcon, IonLabel, IonTabBar, IonTabButton } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
-import { leaf, layersOutline, settingsOutline } from "ionicons/icons";
+import { helpCircleOutline, leaf, layersOutline, settingsOutline } from "ionicons/icons";
 
 @Component({
   selector: "app-tabs",
@@ -15,6 +15,8 @@ import { leaf, layersOutline, settingsOutline } from "ionicons/icons";
       ><ion-icon name="layers-outline" /><ion-label>Projects</ion-label></ion-tab-button
     ><ion-tab-button tab="settings" routerLink="/settings" [selected]="active() === 'settings'"
       ><ion-icon name="settings-outline" /><ion-label>Settings</ion-label></ion-tab-button
+    ><ion-tab-button tab="help" routerLink="/help" [selected]="active() === 'help'"
+      ><ion-icon name="help-circle-outline" /><ion-label>Help</ion-label></ion-tab-button
     ></ion-tab-bar
   >`,
   styles: [
@@ -35,9 +37,9 @@ import { leaf, layersOutline, settingsOutline } from "ionicons/icons";
   ],
 })
 export class AppTabsComponent {
-  readonly active = input.required<"today" | "projects" | "settings">();
+  readonly active = input.required<"today" | "projects" | "settings" | "help">();
 
   constructor() {
-    addIcons({ leaf, layersOutline, settingsOutline });
+    addIcons({ helpCircleOutline, leaf, layersOutline, settingsOutline });
   }
 }
