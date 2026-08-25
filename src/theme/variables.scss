@@ -1,0 +1,165 @@
+@mixin project-companion-theme {
+:root,
+:root[data-theme='calm'] {
+  --ion-font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+  --ion-color-primary: #526c55;
+  --ion-color-primary-rgb: 82, 108, 85;
+  --ion-color-primary-contrast: #fffdf4;
+  --ion-color-primary-contrast-rgb: 255, 253, 244;
+  --ion-color-primary-shade: #485f4b;
+  --ion-color-primary-tint: #637b66;
+  --ion-color-light: #eee9da;
+  --ion-color-light-rgb: 238, 233, 218;
+  --ion-color-light-shade: #d1cdbf;
+  --ion-background-color: #ebe8dc;
+  --ion-text-color: #2b372d;
+  --app-bg: radial-gradient(circle at 10% 7%, rgba(123, 145, 102, .16), transparent 27%), radial-gradient(circle at 91% 15%, rgba(170, 117, 77, .12), transparent 30%), linear-gradient(145deg, #f5f1e6, #e7e9dd 58%, #efe6d7);
+  --surface: rgba(252, 249, 239, .93);
+  --ink: #2b372d;
+  --ink-soft: #506052;
+  --muted: #788078;
+  --line: #d4d6c8;
+  --accent-2: #aa754d;
+  --accent-3: #d6b96e;
+  --tab-bg: rgba(247, 244, 232, .95);
+  --card-shadow: 0 16px 40px rgba(62, 77, 57, .09);
+  --card-radius: 28px;
+  --button-shadow: 0 4px 0 #3a503d;
+}
+
+:root[data-theme='playful'] {
+  --ion-font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  --ion-color-primary: #6c4cff;
+  --ion-color-primary-rgb: 108, 76, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #5f43e0;
+  --ion-color-primary-tint: #7b5eff;
+  --ion-color-light: #f4efff;
+  --ion-color-light-rgb: 244, 239, 255;
+  --ion-color-light-shade: #ddd3f6;
+  --ion-background-color: #fff8f3;
+  --ion-text-color: #251c3f;
+  --app-bg: radial-gradient(circle at 8% 5%, rgba(255, 211, 94, .28), transparent 26%), radial-gradient(circle at 92% 18%, rgba(255, 111, 145, .2), transparent 30%), linear-gradient(145deg, #fffaf2, #f7f3ff 58%, #eefbff);
+  --surface: rgba(255, 255, 255, .88);
+  --ink: #251c3f;
+  --ink-soft: #51466d;
+  --muted: #746b88;
+  --line: #e8ddf3;
+  --accent-2: #ff6f91;
+  --accent-3: #ffca3a;
+  --tab-bg: rgba(255, 250, 255, .9);
+  --card-shadow: 0 18px 0 rgba(108, 76, 255, .08), 0 22px 45px rgba(79, 52, 155, .12);
+  --card-radius: 28px;
+  --button-shadow: 0 7px 0 #4f35cf;
+}
+
+:root[data-theme='code'] {
+  color-scheme: dark;
+  --ion-font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  --ion-color-primary: #39e6c5;
+  --ion-color-primary-rgb: 57, 230, 197;
+  --ion-color-primary-contrast: #061117;
+  --ion-color-primary-contrast-rgb: 6, 17, 23;
+  --ion-color-primary-shade: #32cbae;
+  --ion-color-primary-tint: #4de9cb;
+  --ion-color-light: #122632;
+  --ion-color-light-rgb: 18, 38, 50;
+  --ion-color-light-shade: #1b3745;
+  --ion-background-color: #071018;
+  --ion-text-color: #e8fff9;
+  --app-bg: linear-gradient(rgba(57, 230, 197, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(57, 230, 197, .025) 1px, transparent 1px), #071018;
+  --surface: #0d1b25;
+  --ink: #e8fff9;
+  --ink-soft: #b6d7d5;
+  --muted: #809ba3;
+  --line: #1d3542;
+  --accent-2: #ff5fb7;
+  --accent-3: #c9f55a;
+  --tab-bg: rgba(7, 16, 24, .94);
+  --card-shadow: 0 0 0 1px rgba(57, 230, 197, .05), 0 20px 55px rgba(0, 0, 0, .3);
+  --card-radius: 14px;
+  --button-shadow: 0 0 22px rgba(57, 230, 197, .16);
+}
+
+:root[data-theme='arcade'] {
+  --ion-font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+  --ion-color-primary: #e23b32;
+  --ion-color-primary-rgb: 226, 59, 50;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #c7342c;
+  --ion-color-primary-tint: #e64f47;
+  --ion-color-light: #fff0b8;
+  --ion-color-light-rgb: 255, 240, 184;
+  --ion-color-light-shade: #e1d3a2;
+  --ion-background-color: #78cdf5;
+  --ion-text-color: #173454;
+  --app-bg: linear-gradient(90deg, rgba(255,255,255,.14) 2px, transparent 2px) 0 0 / 24px 24px, linear-gradient(rgba(255,255,255,.12) 2px, transparent 2px) 0 0 / 24px 24px, linear-gradient(180deg, #70caf5 0%, #bceaff 54%, #effbd5 100%);
+  --surface: #fff9dc;
+  --ink: #173454;
+  --ink-soft: #31577b;
+  --muted: #5d7590;
+  --line: #7ca5c4;
+  --accent-2: #35a853;
+  --accent-3: #ffc72e;
+  --tab-bg: rgba(255, 249, 220, .95);
+  --card-shadow: 0 6px 0 #2d65a5, 0 12px 28px rgba(28, 74, 119, .18);
+  --card-radius: 12px;
+  --button-shadow: 0 5px 0 #9e2822;
+}
+
+:root[data-theme='wizard'] {
+  --ion-font-family: Georgia, "Times New Roman", serif;
+  --ion-color-primary: #741f32;
+  --ion-color-primary-rgb: 116, 31, 50;
+  --ion-color-primary-contrast: #fff8e7;
+  --ion-color-primary-contrast-rgb: 255, 248, 231;
+  --ion-color-primary-shade: #661b2c;
+  --ion-color-primary-tint: #823548;
+  --ion-color-light: #f2e8cf;
+  --ion-color-light-rgb: 242, 232, 207;
+  --ion-color-light-shade: #d6ccb6;
+  --ion-background-color: #ead9b7;
+  --ion-text-color: #2e201b;
+  --app-bg: radial-gradient(circle at 14% 9%, rgba(196, 147, 53, .22), transparent 24%), radial-gradient(circle at 88% 17%, rgba(38, 61, 88, .13), transparent 28%), repeating-linear-gradient(0deg, rgba(89, 58, 30, .025) 0, rgba(89, 58, 30, .025) 1px, transparent 1px, transparent 5px), linear-gradient(145deg, #f5ead1, #e8d5ac 58%, #f0e3c6);
+  --surface: rgba(255, 249, 230, .92);
+  --ink: #2e201b;
+  --ink-soft: #5c4032;
+  --muted: #806b59;
+  --line: #d1b982;
+  --accent-2: #c49335;
+  --accent-3: #263d58;
+  --tab-bg: rgba(247, 235, 207, .95);
+  --card-shadow: 0 2px 0 rgba(94, 57, 29, .18), 0 18px 42px rgba(74, 43, 25, .16);
+  --card-radius: 18px;
+  --button-shadow: 0 4px 0 #4d1522;
+}
+
+:root[data-theme='woodland'] {
+  --ion-font-family: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+  --ion-color-primary: #176b4a;
+  --ion-color-primary-rgb: 23, 107, 74;
+  --ion-color-primary-contrast: #fffef0;
+  --ion-color-primary-contrast-rgb: 255, 254, 240;
+  --ion-color-primary-shade: #145e41;
+  --ion-color-primary-tint: #2e7a5c;
+  --ion-color-light: #dcebc6;
+  --ion-color-light-rgb: 220, 235, 198;
+  --ion-color-light-shade: #c2cfae;
+  --ion-background-color: #c9dfb6;
+  --ion-text-color: #123b2b;
+  --app-bg: radial-gradient(ellipse at 2% 8%, rgba(20, 94, 65, .34) 0 7%, transparent 23%), radial-gradient(ellipse at 98% 16%, rgba(65, 139, 66, .28) 0 8%, transparent 27%), radial-gradient(ellipse at 18% 94%, rgba(89, 154, 71, .25) 0 9%, transparent 28%), radial-gradient(circle at 76% 85%, rgba(240, 163, 58, .18), transparent 26%), linear-gradient(145deg, #e7f0cc 0%, #b9d99f 50%, #dce9b8 100%);
+  --surface: rgba(250, 250, 218, .91);
+  --ink: #123b2b;
+  --ink-soft: #315c43;
+  --muted: #5e785f;
+  --line: #8eb47b;
+  --accent-2: #f0a33a;
+  --accent-3: #84b547;
+  --tab-bg: rgba(229, 241, 200, .94);
+  --card-shadow: 0 6px 0 rgba(35, 104, 59, .24), 0 22px 44px rgba(26, 75, 43, .17);
+  --card-radius: 26px;
+  --button-shadow: 0 5px 0 #0f4c34;
+}
+}

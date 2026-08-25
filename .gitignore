@@ -1,0 +1,9 @@
+/node_modules
+/.pnpm-store
+/www
+/.angular
+/.idea
+/.vscode/*
+!/.vscode/extensions.json
+*.log
+.DS_Store

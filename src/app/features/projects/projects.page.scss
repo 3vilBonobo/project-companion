@@ -1,0 +1,58 @@
+.list-shell { padding-top: max(48px, env(safe-area-inset-top)); padding-bottom: 50px; }
+.page-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 34px; }
+.eyebrow { color: var(--ion-color-primary); font-size: .74rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; }
+h1 { font-size: clamp(2.6rem, 10vw, 4rem); letter-spacing: -.055em; margin: 10px 0 8px; color: var(--ink); }
+p { margin: 0; color: var(--muted); }
+.new-project-button, .start-button { --border-radius: 15px; --box-shadow: none; text-transform: none; font-weight: 700; }
+.new-project-button ion-icon[slot='end'] { font-size: .8rem; margin-left: 5px; }
+.project-list { display: grid; gap: 15px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); grid-auto-rows: 1fr; }
+app-empty-state { margin-top: clamp(20px, 7vh, 70px); }
+.start-button { min-width: 210px; }
+.project-template-modal {
+  --width: min(920px, calc(100vw - 36px));
+  --height: min(820px, calc(100vh - 40px));
+  --border-radius: var(--card-radius);
+  --box-shadow: var(--card-shadow);
+}
+.project-template-modal ion-toolbar { --background: var(--surface); --color: var(--ink); }
+.project-template-modal ion-content { --background: var(--app-bg); }
+.template-shell { width: min(100% - 44px, 820px); margin: 0 auto; padding: 36px 0 52px; }
+.template-shell h2 { margin: 8px 0 8px; color: var(--ink); font-size: clamp(1.8rem, 5vw, 2.7rem); letter-spacing: -.045em; }
+.template-shell > p { max-width: 640px; line-height: 1.5; }
+.template-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 28px; }
+.template-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 5px 12px;
+  min-height: 174px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .18s ease, border-color .18s ease;
+}
+.template-card::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--template-accent); }
+.template-card:hover { transform: translateY(-2px); border-color: var(--template-accent); }
+.template-card:focus-visible { outline: 3px solid color-mix(in srgb, var(--template-accent) 45%, transparent); outline-offset: 2px; }
+.template-icon { grid-row: 1 / span 2; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 16px; background: color-mix(in srgb, var(--template-accent) 15%, var(--surface)); color: var(--template-accent); font-size: 1.35rem; }
+.template-badge { color: var(--template-accent); font-size: .66rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+.template-card strong { grid-column: 2; font-size: 1.05rem; }
+.template-card small { grid-column: 1 / -1; color: var(--muted); font-size: .78rem; line-height: 1.45; }
+.template-meta { grid-column: 1 / -1; margin-top: 7px; color: var(--ink-soft); font-size: .7rem; font-weight: 750; }
+@media (max-width: 600px) {
+  .page-header { align-items: flex-start; flex-direction: column; }
+  .new-project-button { width: 100%; margin: 0; }
+  app-empty-state { margin-top: 5px; }
+  .project-template-modal { --width: 100%; --height: 100%; --border-radius: 0; }
+  .template-shell { width: min(100% - 32px, 820px); padding-top: 26px; }
+  .template-grid { grid-template-columns: 1fr; }
+  .template-card { min-height: 158px; }
+}

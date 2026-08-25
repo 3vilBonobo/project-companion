@@ -1,0 +1,93 @@
+<ion-content [fullscreen]="true">
+  <main class="page-shell settings-shell">
+    <span class="eyebrow">Make it yours</span>
+    <h1>Settings</h1>
+    <p class="intro">Tune the app to match your brain, your energy, and your style.</p>
+
+    <section aria-labelledby="profile-heading">
+      <div class="section-title"><ion-icon name="person-circle-outline" /><div><h2 id="profile-heading">Your profile</h2><p>Let Project Companion speak to you more personally.</p></div></div>
+      <div class="setting-row profile-name">
+        <label for="first-name"><strong>First name</strong><small>Stored only on this device and included in your backup.</small></label>
+        <ion-input id="first-name" aria-label="First name" type="text" autocomplete="given-name" maxlength="50" placeholder="Your name" [value]="settings.settings().firstName" (ionChange)="settings.update({ firstName: $event.detail.value || '' })" />
+      </div>
+    </section>
+
+    <section aria-labelledby="appearance-heading">
+      <div class="section-title"><ion-icon name="color-palette-outline" /><div><h2 id="appearance-heading">Choose your world</h2><p>Switch personalities instantly. Your projects stay exactly the same.</p></div></div>
+      <div class="theme-grid" role="radiogroup" aria-label="App theme">
+        <button type="button" class="theme-option calm" [class.selected]="settings.settings().theme === 'calm'" role="radio" [attr.aria-checked]="settings.settings().theme === 'calm'" (click)="selectTheme('calm')">
+          <span class="theme-preview"><i></i><i></i><i></i></span><strong>Cosy</strong><small>Warm earth, moss, quiet comfort</small>
+        </button>
+        <button type="button" class="theme-option playful" [class.selected]="settings.settings().theme === 'playful'" role="radio" [attr.aria-checked]="settings.settings().theme === 'playful'" (click)="selectTheme('playful')">
+          <span class="theme-preview"><i></i><i></i><i></i></span><strong>Playful</strong><small>Colorful, bouncy, game-like</small>
+        </button>
+        <button type="button" class="theme-option code" [class.selected]="settings.settings().theme === 'code'" role="radio" [attr.aria-checked]="settings.settings().theme === 'code'" (click)="selectTheme('code')">
+          <span class="theme-preview"><i></i><i></i><i></i></span><strong>Code mode</strong><small>Dark, nerdy, terminal-inspired</small>
+        </button>
+        <button type="button" class="theme-option arcade" [class.selected]="settings.settings().theme === 'arcade'" role="radio" [attr.aria-checked]="settings.settings().theme === 'arcade'" (click)="selectTheme('arcade')">
+          <span class="theme-preview"><i></i><i></i><i></i></span><strong>Pixel Quest</strong><small>Bright, blocky, retro-platformer fun</small>
+        </button>
+        <button type="button" class="theme-option wizard" [class.selected]="settings.settings().theme === 'wizard'" role="radio" [attr.aria-checked]="settings.settings().theme === 'wizard'" (click)="selectTheme('wizard')">
+          <span class="theme-preview"><i></i><i></i><i></i></span><strong>Wizard Academy</strong><small>Parchment, candlelight, scholarly magic</small>
+        </button>
+        <button type="button" class="theme-option jungle" [class.selected]="settings.settings().theme === 'woodland'" role="radio" [attr.aria-checked]="settings.settings().theme === 'woodland'" (click)="selectTheme('woodland')">
+          <span class="theme-preview"><i></i><i></i><i></i></span><strong>Jungle Quest</strong><small>Lush leaves, tropical color, adventurous energy</small>
+        </button>
+      </div>
+    </section>
+
+    <section aria-labelledby="focus-heading">
+      <div class="section-title"><ion-icon name="leaf-outline" /><div><h2 id="focus-heading">Daily focus</h2><p>Shape the step suggested on Today.</p></div></div>
+      <div class="setting-row">
+        <label for="preferred-time"><strong>Preferred step length</strong><small>We’ll favor tasks that fit this window.</small></label>
+        <ion-select id="preferred-time" interface="popover" aria-label="Preferred step length" [value]="settings.settings().preferredTaskMinutes" (ionChange)="settings.update({ preferredTaskMinutes: $event.detail.value })">
+          <ion-select-option [value]="10">10 minutes</ion-select-option>
+          <ion-select-option [value]="15">15 minutes</ion-select-option>
+          <ion-select-option [value]="20">20 minutes</ion-select-option>
+          <ion-select-option [value]="30">30 minutes</ion-select-option>
+          <ion-select-option [value]="45">45 minutes</ion-select-option>
+        </ion-select>
+      </div>
+      <div class="setting-row">
+        <label><strong>Reduce motion</strong><small>Minimize interface transitions.</small></label>
+        <ion-toggle aria-label="Reduce motion" [checked]="settings.settings().reducedMotion" (ionChange)="settings.update({ reducedMotion: $event.detail.checked })" />
+      </div>
+    </section>
+
+    <section aria-labelledby="reminder-heading">
+      <div class="section-title"><ion-icon name="alarm-outline" /><div><h2 id="reminder-heading">Daily reminder</h2><p>A friendly nudge for the task waiting on Today.</p></div></div>
+      <div class="setting-row">
+        <label><strong>Browser reminder</strong><small>{{ reminders.supported ? 'Works while Project Companion is open; installed apps may also show a badge.' : 'Notifications are unavailable in this browser.' }}</small></label>
+        <ion-toggle aria-label="Daily browser reminder" [disabled]="!reminders.supported" [checked]="settings.settings().remindersEnabled" (ionChange)="toggleReminders($event.detail.checked)" />
+      </div>
+      @if (settings.settings().remindersEnabled) {
+      <div class="setting-row reminder-time">
+        <label for="reminder-time"><strong>Reminder time</strong><small>Uses this device’s local time.</small></label>
+        <ion-input id="reminder-time" aria-label="Reminder time" type="time" [value]="settings.settings().reminderTime" (ionChange)="settings.update({ reminderTime: $event.detail.value || '09:00' })" />
+      </div>
+      <div class="reminder-test"><ion-button fill="clear" size="small" (click)="testReminder()"><ion-icon name="notifications-outline" slot="start" />Send a test</ion-button></div>
+      }
+    </section>
+
+    <section aria-labelledby="data-heading">
+      <div class="section-title"><ion-icon name="cloud-offline-outline" /><div><h2 id="data-heading">Your data</h2><p>{{ projectCount() }} {{ projectCount() === 1 ? 'project' : 'projects' }} stored only on this device.</p></div></div>
+      <div class="data-actions">
+        <ion-button fill="outline" (click)="exportBackup()"><ion-icon name="cloud-download-outline" slot="start" />Export backup</ion-button>
+        <label class="import-button">
+          <ion-icon name="document-outline" />Import backup
+          <input type="file" accept="application/json,.json" (change)="importBackup($event)" />
+        </label>
+      </div>
+    </section>
+
+    <section class="coming-soon" aria-labelledby="later-heading">
+      <div class="section-title"><ion-icon name="phone-portrait-outline" /><div><h2 id="later-heading">Native companion</h2><p>The next platform step after adding Android and iOS targets.</p></div></div>
+      <div class="future-row"><ion-icon name="notifications-outline" /><span><strong>Background mobile reminders</strong><small>Capacitor Local Notifications</small></span></div>
+      <div class="future-row"><ion-icon name="game-controller-outline" /><span><strong>Home and lock-screen widget</strong><small>Today’s pending task at a glance</small></span></div>
+    </section>
+
+    <button class="reset-button" type="button" (click)="resetData()"><ion-icon name="trash-outline" />Clear local data</button>
+    <p class="version">Project Companion · v0.2.1</p>
+  </main>
+</ion-content>
+<ion-footer><app-tabs active="settings" /></ion-footer>

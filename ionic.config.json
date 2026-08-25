@@ -1,0 +1,1 @@
+{ "name": "Project Companion", "type": "angular-standalone", "integrations": { "capacitor": {} } }

@@ -1,0 +1,197 @@
+<ion-header class="project-mobile-header ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/projects" text="" /></ion-buttons>
+    <ion-title>Project</ion-title>
+    <ion-buttons slot="end">
+      <ion-button aria-label="Export project as JSON" (click)="exportProjectPlan()"
+        ><ion-icon slot="icon-only" name="download-outline"
+      /></ion-button>
+      <ion-button aria-label="Edit project" (click)="editProject()"
+        ><ion-icon slot="icon-only" name="create-outline"
+      /></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (project(); as project) {
+  <main class="page-shell detail-shell">
+    <nav class="desktop-project-actions" aria-label="Project actions">
+      <ion-button fill="clear" routerLink="/projects">
+        <ion-icon name="arrow-back" slot="start" />All projects
+      </ion-button>
+      <div>
+        <ion-button fill="outline" (click)="exportProjectPlan()">
+          <ion-icon name="download-outline" slot="start" />Export JSON
+        </ion-button>
+        <ion-button (click)="editProject()"> <ion-icon name="create-outline" slot="start" />Edit project </ion-button>
+      </div>
+    </nav>
+    <header class="project-heading">
+      <div>
+        <span class="eyebrow">A little at a time</span>
+        <h1>{{ project.title }}</h1>
+        <p>{{ project.description || 'A meaningful project, one small step at a time.' }}</p>
+      </div>
+      <app-progress-circle [value]="progress().percentage" />
+    </header>
+
+    <div class="step-heading">
+      <div>
+        <h2>Gentle plan</h2>
+        <span>{{ progress().completed }} of {{ progress().total }} complete</span>
+      </div>
+      <div class="step-actions">
+        <app-plan-import [existingProjectId]="project.id" [compact]="true" />
+        <ion-button fill="clear" (click)="addTask()"><ion-icon name="add" slot="start" />Add a step</ion-button>
+      </div>
+    </div>
+
+    @if (project.tasks.length) {
+    <div class="category-list">
+      @for (group of taskGroups(); track group.category) {
+      <section class="category-group">
+        @if (hasTaskCategories()) {
+        <header class="category-heading">
+          <div>
+            <span>Project phase</span>
+            <h3>{{ group.category }}</h3>
+          </div>
+          <div
+            class="category-progress"
+            role="progressbar"
+            [attr.aria-label]="group.category + ' progress'"
+            [attr.aria-valuenow]="group.percentage"
+            aria-valuemin="0"
+            aria-valuemax="100">
+            <small>{{ group.completed }} of {{ group.total }}</small>
+            <div class="category-track"><div [style.width.%]="group.percentage"></div></div>
+          </div>
+        </header>
+        }
+        <ion-reorder-group
+          class="task-list"
+          [disabled]="false"
+          (ionItemReorder)="reorderTasks($event, group.tasks)"
+          role="list"
+          [attr.aria-label]="hasTaskCategories() ? group.category + ' steps' : 'Project steps'">
+          @for (task of group.tasks; track task.id) {
+          <li role="listitem" [class.completed]="task.completed">
+            <button
+              class="complete-button"
+              type="button"
+              [attr.aria-label]="task.completed ? 'Mark ' + task.title + ' as not complete' : 'Complete ' + task.title"
+              (click)="projects.toggleTask(project.id, task.id)">
+              <ion-icon [name]="task.completed ? 'checkmark-circle' : 'ellipse-outline'" />
+            </button>
+            <button class="task-copy" type="button" (click)="editTask(task)">
+              <strong>{{ task.title }}</strong>
+              <span>{{ task.estimatedMinutes }} min · {{ task.difficulty }}</span>
+              @if (task.description) { <small>{{ task.description }}</small> }
+            </button>
+            <ion-button
+              fill="clear"
+              color="medium"
+              aria-label="More actions for this step"
+              (click)="openTaskActions(task)">
+              <ion-icon slot="icon-only" name="ellipsis-horizontal" />
+            </ion-button>
+            <ion-reorder [attr.aria-label]="'Drag to reorder ' + task.title" />
+          </li>
+          }
+        </ion-reorder-group>
+      </section>
+      }
+    </div>
+    } @else {
+    <app-empty-state title="A clear beginning" message="Add one small step when you’re ready.">
+      <ion-button (click)="addTask()">Add the first step</ion-button>
+    </app-empty-state>
+    }
+
+    <button class="delete-project" type="button" (click)="deleteProject()">Delete project</button>
+  </main>
+  } @else {
+  <main class="page-shell">
+    <app-empty-state title="Project not found" message="It may have been removed on another screen."
+      ><ion-button routerLink="/projects">Back to projects</ion-button></app-empty-state
+    >
+  </main>
+  }
+</ion-content>
+
+<ion-footer><app-tabs active="projects" /></ion-footer>
+
+<ion-modal class="task-editor-modal" [isOpen]="taskEditorOpen()" (didDismiss)="closeTaskEditor()">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar>
+        <ion-buttons slot="start"><ion-button (click)="closeTaskEditor()">Cancel</ion-button></ion-buttons>
+        <ion-title>{{ editingTask() ? 'Edit step' : 'New step' }}</ion-title>
+        <ion-buttons slot="end"
+          ><ion-button strong="true" [disabled]="taskForm.invalid" (click)="saveTask()">Save</ion-button></ion-buttons
+        >
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <form class="task-form page-shell" [formGroup]="taskForm" (ngSubmit)="saveTask()">
+        <ion-input
+          label="Step title"
+          labelPlacement="stacked"
+          fill="outline"
+          formControlName="title"
+          maxlength="80"
+          placeholder="What can you do next?" />
+        @if (taskForm.controls.title.touched && taskForm.controls.title.invalid) {
+        <small class="validation">Give this step a short title.</small> }
+        <ion-input
+          label="Category or phase"
+          labelPlacement="stacked"
+          fill="outline"
+          formControlName="category"
+          maxlength="40"
+          helperText="Related steps with the same category appear together."
+          placeholder="For example, Foundation" />
+        <ion-textarea
+          label="Helpful detail"
+          labelPlacement="stacked"
+          fill="outline"
+          formControlName="description"
+          maxlength="240"
+          autoGrow="true"
+          placeholder="Optional" />
+        <div class="form-grid">
+          <ion-input
+            label="Minutes"
+            labelPlacement="stacked"
+            fill="outline"
+            type="number"
+            min="5"
+            max="180"
+            formControlName="estimatedMinutes" />
+          <ion-select
+            label="Energy"
+            labelPlacement="stacked"
+            fill="outline"
+            interface="popover"
+            formControlName="difficulty">
+            <ion-select-option value="gentle">Gentle</ion-select-option>
+            <ion-select-option value="focused">Focused</ion-select-option>
+            <ion-select-option value="stretch">Stretch</ion-select-option>
+          </ion-select>
+        </div>
+        <ion-textarea
+          label="Private notes"
+          labelPlacement="stacked"
+          fill="outline"
+          formControlName="notes"
+          maxlength="500"
+          autoGrow="true"
+          placeholder="Anything that will help when you return" />
+        <ion-button class="save-step" expand="block" type="submit" [disabled]="taskForm.invalid"
+          >{{ editingTask() ? 'Save changes' : 'Add this step' }}</ion-button
+        >
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>

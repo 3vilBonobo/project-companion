@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "title": "Create a Small Balcony Garden",
+  "description": "Build a calm, low-maintenance garden one small choice at a time.",
+  "tasks": [
+    {
+      "title": "Measure the sunny space",
+      "category": "Foundation",
+      "description": "Note the width, depth, and approximate hours of direct sunlight.",
+      "estimatedMinutes": 10,
+      "difficulty": "gentle",
+      "notes": ""
+    },
+    {
+      "title": "Choose three easy plants",
+      "category": "Planning",
+      "description": "Pick plants suited to the available light and local climate.",
+      "estimatedMinutes": 20,
+      "difficulty": "focused",
+      "notes": "Start small; three plants are enough."
+    },
+    {
+      "title": "Buy pots and soil",
+      "category": "Setup",
+      "description": "Choose pots with drainage and one suitable bag of potting mix.",
+      "estimatedMinutes": 30,
+      "difficulty": "focused",
+      "notes": ""
+    }
+  ]
+}

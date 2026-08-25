@@ -1,0 +1,74 @@
+<ion-content [fullscreen]="true">
+  <main class="page-shell list-shell">
+    <header class="page-header">
+      <div>
+        <span class="eyebrow">Your meaningful work</span>
+        <h1>Projects</h1>
+        <p>A quiet home for the things you care about.</p>
+      </div>
+      @if (projects.hasProjects()) {
+      <ion-button class="new-project-button" (click)="chooseProjectStart()">
+        <ion-icon slot="start" name="add" />New project<ion-icon slot="end" name="chevron-down" />
+      </ion-button>
+      }
+    </header>
+
+    @if (projects.hasProjects()) {
+    <section class="project-list" aria-label="Projects">
+      @for (project of projects.projects(); track project.id) {
+      <app-project-card
+        [project]="project"
+        (opened)="open(project.id)"
+        (deleted)="confirmDelete(project.id, project.title)" />
+      }
+    </section>
+    } @else {
+    <app-empty-state
+      title="A clear beginning"
+      message="Choose a starter template, begin manually, or import a plan from ChatGPT. One choice is enough.">
+      <ion-button class="start-button" (click)="chooseProjectStart()">Start your first project</ion-button>
+    </app-empty-state>
+    }
+
+    <app-plan-import [triggerVisible]="false" (imported)="openImported($event)" />
+  </main>
+</ion-content>
+<ion-footer><app-tabs active="projects" /></ion-footer>
+
+<ion-modal class="project-template-modal" [isOpen]="templatePickerOpen()" (didDismiss)="closeTemplatePicker()">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar>
+        <ion-buttons slot="start"><ion-button (click)="closeTemplatePicker()">Cancel</ion-button></ion-buttons>
+        <ion-title>Starter templates</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <main class="template-shell">
+        <span class="eyebrow">Pick a starting quest</span>
+        <h2>Begin with a plan you can change</h2>
+        <p>Every template stays on this device and becomes fully editable the moment you choose it.</p>
+        <div class="template-grid" role="list" aria-label="Project starter templates">
+          @for (template of templateCatalog.templates; track template.id) {
+          <button
+            type="button"
+            class="template-card"
+            role="listitem"
+            [style.--template-accent]="template.accent"
+            [attr.aria-label]="'Use ' + template.title + ' template'"
+            (click)="useTemplate(template)">
+            <span class="template-icon"><ion-icon [name]="template.icon" /></span>
+            <span class="template-badge">{{ template.badge }}</span>
+            <strong>{{ template.title }}</strong>
+            <small>{{ template.description }}</small>
+            <span class="template-meta">
+              {{ template.plan.tasks.length }} steps · Final phase: {{ template.plan.tasks[template.plan.tasks.length -
+              1].category }}
+            </span>
+          </button>
+          }
+        </div>
+      </main>
+    </ion-content>
+  </ng-template>
+</ion-modal>
